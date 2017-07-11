@@ -1,0 +1,45 @@
+extends ../layout
+
+block content
+    -function prettyDate(date){
+        //if it's already a date object and not a string you don't need this line:
+        //- -var date = new Date(dateString);
+        -var d = date.getDate();
+        -var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun","Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+        -var m = monthNames[date.getMonth()];
+        -var y = date.getFullYear();
+        -return d+' '+m+' '+y;
+    -}
+
+    h1.
+         #{title}
+    table
+        thead
+            tr 
+                th Name
+                th Age
+                th Date of Birth
+                th Is Loved
+                th ID
+                th Actions
+        tbody
+        - each user, i in users
+            tr
+                td= user.name
+                td= user.age
+                td #{prettyDate(user.dob)}
+                td= user.isloved
+                td= user._id
+                td(colspan='3')
+                    span
+                        a(href='/users/#{user._id}/edit') Edit 
+                    span
+                        a(href='/users/#{user._id}') Show
+
+                    form(action='/users/#{user._id}/edit',method='post',enctype='application/x-www-form-urlencoded')
+                        input(type='hidden',value='DELETE',name='_method')
+                        button(type='submit').
+                            Delete 
+                    
+                
+    a(href='/users/new') Add New User
